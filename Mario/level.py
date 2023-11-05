@@ -5,7 +5,7 @@ from player import Player
 
 
 class Level:
-    def __init__(self, level_data, surface):#level_data se la level_map
+    def __init__(self, level_data: list, surface) -> None:#level_data se la level_map
 
         #level setup
         self.display_surface = surface
@@ -13,7 +13,7 @@ class Level:
         self.world_shift = 0
         self.current_x = 0
 
-    def setup_level(self, layout):#layout o day cung dong vai tro la level_data
+    def setup_level(self, layout: list) -> None:#layout o day cung dong vai tro la level_data
         self.tiles = pygame.sprite.Group()#Group se co cac phuong thuc la draw va update
         self.player = pygame.sprite.GroupSingle()#neu muon ve thi ta phai cho player vao 1 group
 
@@ -36,7 +36,7 @@ class Level:
 
                     self.player.add(player_sprite)
 
-    def scroll_x(self):#to scroll the map
+    def scroll_x(self) -> None:#to scroll the map
         player = self.player.sprite##.sprite attribute cua lop GroupSingle
         player_x = player.rect.centerx#Lay hoanh do x tai trung tam cua surface player_x
         direction_x = player.direction.x
@@ -50,7 +50,7 @@ class Level:
         else:
             self.world_shift = 0
             player.speed = 8
-    def horizontal_movement_collision(self):#kiểm tra va chạm phải và trái
+    def horizontal_movement_collision(self) -> None:#kiểm tra va chạm phải và trái
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed#tốc độ của player.rect.x, chính là tốc độ của nhân vật
 
@@ -81,7 +81,7 @@ class Level:
         elif player.on_right and (player.rect.right > self.current_x or player.direction.x <= 0):
             player.on_right = False
 
-    def vertical_movement_collision(self):#kiểm tra va chạm trên và dưới
+    def vertical_movement_collision(self) -> None:#kiểm tra va chạm trên và dưới
         player = self.player.sprite
         player.apply_gravity()
 
@@ -105,7 +105,7 @@ class Level:
         if player.on_ceiling and player.direction.y > player.gravity:  #on_ceiling = True và đang rơi do ta không thể nhảy được nữa neên chỉ xét đều kiện đang rơi
             player.on_ceiling = False
 
-    def run(self):
+    def run(self) -> None:
         #level tile
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)# ta se draw tren self.display_surface, dĩ nhiên để draw thì ta phải cho vào Group()

@@ -4,7 +4,7 @@ from tiles import Tile
 from support import import_folder
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos):
+    def __init__(self, pos: tuple):
         super().__init__()
         self.import_character_assets()
         self.frame_index = 0
@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.on_left = False
         self.on_right = False
 
-    def import_character_assets(self):
+    def import_character_assets(self) -> None:
         character_path = '5 - fixes/graphics/character/'
         self.animations = {'idle': [], 'run': [], 'jump': [], 'fall': []}
 
@@ -38,7 +38,7 @@ class Player(pygame.sprite.Sprite):
             full_path = character_path + animation  #1 cách hay để lấy được đường dẫn đủ cho từng folder bằng vòng for
             self.animations[animation] = import_folder(full_path) #gắn key bằng import_folder
 
-    def animate(self):
+    def animate(self) -> None:
         animation = self.animations[self.status] #animation là value tại key = self.status, trong đó status gồm idle, run, fall, jump, là một list gồm các frame
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
 
 
 
-    def get_status(self):#hàm để lấy trạng thái của player dựa vaào direction
+    def get_status(self) -> None:#hàm để lấy trạng thái của player dựa vaào direction
         if self.direction.y < 0:
             self.status = 'jump'
         elif self.direction.y > self.gravity: #TH đặc biệt
@@ -93,13 +93,13 @@ class Player(pygame.sprite.Sprite):
                 self.status = 'idle'
 
 
-    def apply_gravity(self):
+    def apply_gravity(self) -> None:
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
 
-    def jump(self):
+    def jump(self) -> None:
         self.direction.y = self.jump_speed
-    def get_input(self):#hàm này sẽ nhận vào các tương tác từ bàn phím
+    def get_input(self) -> None:#hàm này sẽ nhận vào các tương tác từ bàn phím
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
@@ -117,7 +117,7 @@ class Player(pygame.sprite.Sprite):
 
 
 
-    def update(self):
+    def update(self) -> None:
         self.get_input()
         # self.rect.x += self.direction.x * self.speed #hàm này update vị trí sau khi có tương tác bàn phím
         # self.apply_gravity()      #đã dùng trong level khi tạo vertical_movement_collision()

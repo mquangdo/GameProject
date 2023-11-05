@@ -5,7 +5,7 @@ import pygame
 
 #walk sẽ trả về 3 thứ, đường dẫn directory, tên directory, và tên các file trong folder
 
-def import_folder(path):
+def import_folder(path: str) -> list:
     surface_list = []
     for _, __, img_files in walk(path):#_ là directory path, __ là directory name
         for image in img_files:
