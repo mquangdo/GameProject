@@ -1,13 +1,14 @@
 import pygame
+from supports import import_folder
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, size: int, x: int, y: int):
         super().__init__()
-        self.image = pygame.Surface((size, size))
+        self.image = pygame.Surface((size, size)) # vừa có thể là bề mặt Surface vừa có thể là pygame.image.load
 
-        self.rect = self.image.get_rect(topleft = (x, y))
+        self.rect = self.image.get_rect(topleft = (x, y))# tương tự như pygame.image.load, ta cũng có thể get_rect
 
-    def update(self, shift):
+    def update(self, shift: int):
         self.rect.x += shift
 
 class StaticTile(Tile):#dành cho các tile tĩnh như cỏ, crate, terrain
@@ -23,5 +24,30 @@ class Crate(StaticTile):
                                                                     #nên ta cộng thêm size để đẩy nó xuống
 
 class AnimatedTile(Tile):
-    def __init__(self,size: int, x, y):
-        super().__init__()
+    def __init__(self,size: int, x, y, path: str):
+        super().__init__(size, x, y)
+        self.frames = import_folder(path)
+        self.frames_index = 0
+        self.image = self.frames[self.frames_index]
+
+    def animate(self) -> None:
+        self.frames_index += 0.15
+        if self.frames_index >= len(self.frames):
+            self.frames_index = 0
+        self.image = self.frames[int(self.frames_index)]
+
+    def update(self, shift: int): #ghi đè update ở trên
+        self.animate()
+        self.rect.x += shift
+
+class Coin(AnimatedTile):
+    def __init__(self, size: int, x, y, path: str):
+        super().__init__(size, x, y, path)
+        center_x = x + int(size / 2)
+        center_y = y + int(size / 2)
+        self.rect = self.image.get_rect(center = (center_x, center_y))
+
+class
+
+
+
