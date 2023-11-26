@@ -36,7 +36,7 @@ class AnimatedTile(Tile):
             self.frames_index = 0
         self.image = self.frames[int(self.frames_index)]
 
-    def update(self, shift: int): #ghi đè update ở trên
+    def update(self, shift: int) -> None: #ghi đè update ở trên
         self.animate()
         self.rect.x += shift
 
@@ -47,7 +47,21 @@ class Coin(AnimatedTile):
         center_y = y + int(size / 2)
         self.rect = self.image.get_rect(center = (center_x, center_y))
 
-class
+class Palm(AnimatedTile):
+    def __init__(self, size: int, x, y, path: str, offset: int):
+        super().__init__(size, x, y, path)
+        offset_y = y - offset
+        self.rect = self.image.get_rect(topleft = (x, offset_y))
+
+class Enemy(AnimatedTile):
+    def __init__(self, size: int, x, y, path: str):
+        super().__init__(size, x, y, path)
+        offset_y = y + size
+        self.rect = self.image.get_rect(midbottom = (x, offset_y))
+
+
+
+
 
 
 

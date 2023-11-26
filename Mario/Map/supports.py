@@ -28,8 +28,8 @@ def import_cut_graphics(path: str) -> list:
     for row in range(tile_num_y):
         for col in range(tile_num_x):
             x = col * tile_size
-            y = row * tile_size
-            new_surf = pygame.Surface((tile_size, tile_size))  #tao ra 1 surface 64 * 64 de ta co the blit hinh anh len
+            y = row * tile_size     #tham so flag giup ta khong bi dính hiện tượng vạch đen
+            new_surf = pygame.Surface((tile_size, tile_size), flags = pygame.SRCALPHA)  #tao ra 1 surface 64 * 64 de ta co the blit hinh anh len
             new_surf.blit(surface, (0, 0), pygame.Rect(x, y, tile_size, tile_size))#pygame.Rect(top = x, left = y, width = tile_size, height = tile_size) se gay ra loi
             cut_tiles.append(new_surf) #dest(x,y) x, y càng lớn thì các ô tile sẽ càng rời rạc và ko khít
                                     #ở đây nếu ta không có tham số pygame.Rect là tham số thứ 3 thì nó sẽ blit cả surface(cả ảnh)
