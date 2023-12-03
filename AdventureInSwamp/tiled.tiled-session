@@ -1,0 +1,130 @@
+{
+    "activeFile": "level_data/untitled.tmx",
+    "expandedProjectPaths": [
+        "tile_set",
+        ".",
+        "level_data"
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "#swamp_terrain": {
+            "dynamicWrapping": false
+        },
+        ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Asus/Documents/Castle_map/rock.tsx": {
+            "scaleInDock": 1
+        },
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_0.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1718.1818181818182,
+                "y": 631.8181818181818
+            }
+        },
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/bound.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/crate.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/terrain.tsx": {
+            "scaleInDock": 1
+        },
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/tree.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "level_data/untitled.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3006.5,
+                "y": 471.5
+            }
+        },
+        "tile_set/brush.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tile_set/bush.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tile_set/coin.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tile_set/ladder.tsx": {
+            "dynamicWrapping": true
+        },
+        "tile_set/stone.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tile_set/swamp_terrain.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tile_set/terrain.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tile_set/tree.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tile_set/willow.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/0",
+    "last.imagePath": "C:/Users/Asus/Downloads/craftpix-net-672461-free-swamp-game-tileset-pixel-art/3 Objects/Ladders",
+    "map.lastUsedExportFilter": "All Files (*)",
+    "openFiles": [
+        "level_data/untitled.tmx",
+        "tile_set/tree.tsx",
+        "tile_set/willow.tsx",
+        "tile_set/stone.tsx",
+        "tile_set/terrain.tsx"
+    ],
+    "project": "tiled.tiled-project",
+    "recentFiles": [
+        "tile_set/bush.tsx",
+        "tile_set/brush.tsx",
+        "tile_set/stone.tsx",
+        "tile_set/terrain.tsx",
+        "tile_set/willow.tsx",
+        "tile_set/tree.tsx",
+        "level_data/untitled.tmx",
+        "tile_set/swamp_terrain.tsx",
+        "tile_set/coin.tsx",
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_0.tmx",
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/tree.tsx",
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/crate.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 46,
+        "width": 46
+    },
+    "tileset.type": 1
+}
