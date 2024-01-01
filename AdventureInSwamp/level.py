@@ -20,6 +20,7 @@ class Level:
         self.max_health = 100
         self.current_health = 100
 
+        #enemy collisions
         self.invincible = False
         self.timer = 400
         self.hurt_time = 0
@@ -72,9 +73,33 @@ class Level:
         self.explosion_sprite = pygame.sprite.Group() #có thể tùy ý tạo các group bên ngoài rồi draw các thứ
 
         #rocket
-        self.rocket_sprite = pygame.sprite.Group()
-        rocket = Rocket(tile_size, 100, 100)
-        self.rocket_sprite.add(rocket)
+        # self.rocket_sprite = self.fire_rocket()
+
+        # rocket spawning
+        # self.rocket_timer = 500
+        # self.fire_time = 0
+
+
+
+
+
+
+    # def fire_rocket(self):
+    #     if self.can_fire:
+    #         rocket_list = pygame.sprite.Group()
+    #         rocket = Rocket(tile_size, 100, 100)
+    #         rocket_list.add(rocket)
+    #         self.fire_time = pygame.time.get_ticks()
+    #         self.can_fire = False
+    #         return rocket_list
+    #
+    # def delay_rocket(self):
+    #     if not self.can_fire:
+    #         current_time = pygame.time.get_ticks()
+    #         if current_time - self.fire_time >= self.rocket_timer:
+    #             self.can_fire = True
+
+
 
     def create_tile_group(self, layout: list, type: str):
         sprite_group = pygame.sprite.Group()
@@ -273,28 +298,17 @@ class Level:
                 slime_top = slime.rect.top
                 player_bottom = self.player.sprite.rect.bottom
                 if slime_top < player_bottom < slime_center and self.player.sprite.direction.y >= 0:
-                    self.player.sprite.direction.y = -8
+                    self.player.sprite.direction.y = - 8
                     explosion_sprite = Effect(tile_size ,slime.rect.centerx, slime.rect.centery)
                     self.explosion_sprite.add(explosion_sprite)
                     slime.kill()
                 else:
-                    self.get_damage()
+                    self.player.sprite.get_damage()
 
-    def get_damage(self):
-        if not self.invincible:
-            self.current_health = self.current_health - self.max_health / 10
-            self.invincible = True
-            self.hurt_time = pygame.time.get_ticks()
 
-    def invincible_timer(self):
-        if self.invincible:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.hurt_time >= self.timer:
-                self.invincible = False
-
-    def wave_value(self):
-        value = math.sin(pygame.time.get_ticks())
-        pass
+    def check_death(self):
+        if self.player.sprite.current_health <= 0:
+            self.display_surface.fill('Black')
 
     def run(self):
 
@@ -322,6 +336,7 @@ class Level:
         # player
         self.player.update()
         self.scroll_x()
+
         # self.scroll_y()
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
@@ -346,15 +361,22 @@ class Level:
 
 
         #ui
-        self.ui.show_health(self.current_health, 100)
+        self.ui.show_health(self.player.sprite.current_health, 100)
         self.ui.show_coin(self.coin)
 
         self.check_enemy_collisions()
         self.explosion_sprite.draw(self.display_surface)
         self.explosion_sprite.update(self.world_shift)
-        self.invincible_timer()
+        # self.player.sprite.invincible_timer() dòng này thay cho dòng ở update ở player.py vẫn ok
 
 
-        #
-        self.rocket_sprite.draw(self.display_surface)
-        self.rocket_sprite.update(self.world_shift)
+
+
+        #rocket
+        # self.rocket_sprite.draw(self.display_surface)
+        # self.delay_rocket()
+        # self.rocket_sprite.update(self.world_shift)
+
+
+        #check_death
+        self.check_death()

@@ -1,6 +1,8 @@
 import pygame
 from tiles import Tile
 from supports import import_folder
+import math
+from ui import UI
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos: tuple):
@@ -31,6 +33,17 @@ class Player(pygame.sprite.Sprite):
         self.on_right = False
         self.on_air = False
 
+
+        #collisions
+        self.invincible = False
+        self.timer = 1000
+        self.hurt_time = 0
+
+        #ui setup
+        self.coin = 0
+        self.max_health = 100
+        self.current_health = 100
+
     def import_character_assets(self) -> None:
         character_path = 'pink_man/'
         self.animations = {'idle': [], 'run': [], 'double_jump': [], 'fall': []}
@@ -51,6 +64,13 @@ class Player(pygame.sprite.Sprite):
         else:
             flipped_image = pygame.transform.flip(image, True, False) #false thì dùng pyamge.transform.flip() để flip các frame
             self.image = flipped_image
+
+        if self.invincible:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
+
 
         #điều chỉnh các rectangle, khối code này giúp các frame của ta không bị trôi nổi lềnh bềnh trên tile
         # if self.on_ground:
@@ -80,7 +100,24 @@ class Player(pygame.sprite.Sprite):
         #1 chút sang bên trái, do đó va chạm với tile và ta ko rơi xuống được
 
 
+    def get_damage(self):
+        if not self.invincible:
+            self.current_health = self.current_health - self.max_health / 10
+            self.invincible = True
+            self.hurt_time = pygame.time.get_ticks()
 
+    def invincible_timer(self):
+        if self.invincible:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.hurt_time >= self.timer:
+                self.invincible = False
+
+    def wave_value(self):
+        value = math.sin(pygame.time.get_ticks())
+        if value >= 0:
+            return 255
+        else:
+            return 0
 
 
     def get_status(self) -> None:#hàm để lấy trạng thái của player dựa vaào direction
@@ -119,6 +156,7 @@ class Player(pygame.sprite.Sprite):
             self.jump()
 
 
+
     def update(self) -> None:
         self.get_input()
 
@@ -126,3 +164,4 @@ class Player(pygame.sprite.Sprite):
         # self.apply_gravity()      #đã dùng trong level khi tạo vertical_movement_collision()
         self.get_status()
         self.animate()
+        self.invincible_timer()
