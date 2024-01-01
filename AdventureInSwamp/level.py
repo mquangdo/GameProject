@@ -1,14 +1,29 @@
+import math
+
 import pygame
-from supports import import_csv_layout, import_cut_graphic
+from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket
 from player import Player
+from ui import UI
+
 
 
 class Level:
     def __init__(self, level_data: dict, surface) -> None:
         self.display_surface = surface
-        self.world_shift = -1
+        self.world_shift = 0
+
+        #UI setup
+        self.ui = UI(self.display_surface)
+        self.coin = 0
+        self.max_health = 100
+        self.current_health = 100
+
+        self.invincible = False
+        self.timer = 400
+        self.hurt_time = 0
+
 
         #terrain_layout
         terrain_layout: list = import_csv_layout(level_data['terrain'])#level_data['terrain'] là 1 đường dẫn trong dictionary
@@ -36,10 +51,30 @@ class Level:
         self.player = pygame.sprite.GroupSingle()
         self.player_setup(player_layout)
 
+
         #ladder
         ladder: list = import_csv_layout(level_data['ladder'])
         self.ladder_sprites = self.create_tile_group(ladder, 'ladder')
 
+        # fly_eye
+        fly_eye_layout: list = import_csv_layout(level_data['fly_eye'])
+        self.fly_eye_sprites = self.create_tile_group(fly_eye_layout, 'fly_eye')
+
+        # slime
+        slime_layout: list = import_csv_layout(level_data['slime'])
+        self.slime_sprites = self.create_tile_group(slime_layout, 'slime')
+
+        # boundarie
+        bound_layout: list = import_csv_layout(level_data['bound'])
+        self.bound_sprites = self.create_tile_group(bound_layout, 'bound')
+
+        #effect
+        self.explosion_sprite = pygame.sprite.Group() #có thể tùy ý tạo các group bên ngoài rồi draw các thứ
+
+        #rocket
+        self.rocket_sprite = pygame.sprite.Group()
+        rocket = Rocket(tile_size, 100, 100)
+        self.rocket_sprite.add(rocket)
 
     def create_tile_group(self, layout: list, type: str):
         sprite_group = pygame.sprite.Group()
@@ -51,7 +86,7 @@ class Level:
                     y = row_index * tile_size
 
                     if type == 'terrain':
-                        terrain_tile_list = import_cut_graphic('graphics/terrain/terrain.png')
+                        terrain_tile_list = import_cut_graphics('graphics/terrain/terrain.png')
                         tile_surface = terrain_tile_list[int(val)]
                         sprite = StaticTile(tile_size, x, y, tile_surface)
 
@@ -99,17 +134,30 @@ class Level:
                         if val == '0':
                             sprite = Ladder(tile_size, x, y, 'graphics/ladder/1.png' )
 
+                    if type == 'slime':
+                        sprite = Slime(tile_size, x, y, 'graphics/slime', 46)
+
+                    if type == 'fly_eye':
+                        sprite = FlyEye(tile_size, x, y, 'graphics/fly_eye', 46)
+
+                    if type == 'bound':
+                        sprite = StaticTile(tile_size, x, y, pygame.transform.scale(pygame.image.load('graphics/bound/bound.png'),(tile_size, tile_size)))
+
                     sprite_group.add(sprite)
+
         return sprite_group
 
-    def collision(self):
-        for fly_eye in self.fly_eye_sprites.sprites():
-            if pygame.sprite.spritecollide(fly_eye, self.bound_sprites, False):
-                fly_eye.reverse()
 
+    def collision(self):
+        player = self.player.sprite
+        for fly_eye in self.fly_eye_sprites.sprites():
+            if pygame.sprite.spritecollide(fly_eye, self.bound_sprites, False):#lưu ý tham số thứ 2 phải là 1 iterable
+                fly_eye.reverse()                                                    # đó là lí do vì sao ta ko thể dùng sprite.collide
+                                                                                     # để kiểm tra va chạm cho người chơi
         for slime in self.slime_sprites.sprites():
-            if pygame.sprite.spritecollide(slime, self.bound_sprites, False):
+            if pygame.sprite.spritecollide(slime, self.bound_sprites, False): #con tham so dau tien chi la 1 sprite
                 slime.reverse()
+
 
     def player_setup(self, layout):
         for row_index, row in enumerate(layout):
@@ -132,7 +180,7 @@ class Level:
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed / 1.8#tốc độ của player.rect.x, chính là tốc độ của nhân vật
 
-        collidable_sprite = self.terrain_sprites.sprites()
+        collidable_sprite = self.terrain_sprites.sprites() + self.stone_sprites.sprites()
 
         for sprite in collidable_sprite: #lay ra cac sprite trong tiles
             if sprite.rect.colliderect(player.rect):#kiem tra xem neu sprite nay va cham voi player.rect
@@ -162,10 +210,10 @@ class Level:
             player.on_right = False
 
     def vertical_movement_collision(self) -> None:#kiểm tra va chạm trên và dưới
-        player = self.player.sprite
+        player = self.player.sprite #player.rect = self.player.sprite.rect la rect cua moi sprite
         player.apply_gravity()
 
-        collidable_sprite = self.terrain_sprites.sprites()
+        collidable_sprite = self.terrain_sprites.sprites() + self.stone_sprites.sprites()
 
         for sprite in collidable_sprite: #lay ra cac sprite trong tiles
             if sprite.rect.colliderect(player.rect):#kiem tra xem neu sprite nay va cham voi player.rect
@@ -192,7 +240,7 @@ class Level:
         player_x = player.rect.centerx#Lay hoanh do x tai trung tam cua surface player_x
         direction_x = player.direction.x
 
-        if player_x < screen_width / 2  and direction_x < 0:
+        if player_x < screen_width / 3 and direction_x < 0:
             self.world_shift = 8 / 1.8
             player.speed = 0
         elif player_x > screen_width - screen_width / 2 and direction_x > 0:
@@ -208,6 +256,45 @@ class Level:
             if sprites.rect.colliderect(player.rect):
                 player.rect.y -= 1
 
+
+    def check_enemy_collisions(self):
+
+
+        enemy_collision = pygame.sprite.spritecollide(self.player.sprite, self.slime_sprites, dokill = False) + pygame.sprite.spritecollide(self.player.sprite, self.fly_eye_sprites, dokill = False)
+        # for slime in self.slime_sprites.sprites():
+        #     if slime.rect.colliderect(self.player.sprite.rect) and self.player.sprite.direction.y > 0: #các sprite sẽ có thuộc tính
+        #         slime.kill()                                                                           #của player
+
+        #đoạn code này chạy được
+
+        if enemy_collision:
+            for slime in enemy_collision:
+                slime_center = slime.rect.centery
+                slime_top = slime.rect.top
+                player_bottom = self.player.sprite.rect.bottom
+                if slime_top < player_bottom < slime_center and self.player.sprite.direction.y >= 0:
+                    self.player.sprite.direction.y = -8
+                    explosion_sprite = Effect(tile_size ,slime.rect.centerx, slime.rect.centery)
+                    self.explosion_sprite.add(explosion_sprite)
+                    slime.kill()
+                else:
+                    self.get_damage()
+
+    def get_damage(self):
+        if not self.invincible:
+            self.current_health = self.current_health - self.max_health / 10
+            self.invincible = True
+            self.hurt_time = pygame.time.get_ticks()
+
+    def invincible_timer(self):
+        if self.invincible:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.hurt_time >= self.timer:
+                self.invincible = False
+
+    def wave_value(self):
+        value = math.sin(pygame.time.get_ticks())
+        pass
 
     def run(self):
 
@@ -244,3 +331,30 @@ class Level:
         #ladder
         self.ladder_sprites.draw(self.display_surface)
         self.ladder_sprites.update(self.world_shift)
+
+        #slime
+        self.slime_sprites.draw(self.display_surface)
+        self.slime_sprites.update(self.world_shift)
+
+        #fly_eye
+        self.fly_eye_sprites.draw(self.display_surface)
+        self.fly_eye_sprites.update(self.world_shift)
+
+        #boundarie
+        self.bound_sprites.update(self.world_shift)
+        self.collision()
+
+
+        #ui
+        self.ui.show_health(self.current_health, 100)
+        self.ui.show_coin(self.coin)
+
+        self.check_enemy_collisions()
+        self.explosion_sprite.draw(self.display_surface)
+        self.explosion_sprite.update(self.world_shift)
+        self.invincible_timer()
+
+
+        #
+        self.rocket_sprite.draw(self.display_surface)
+        self.rocket_sprite.update(self.world_shift)

@@ -29,6 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.on_ceiling = False
         self.on_left = False
         self.on_right = False
+        self.on_air = False
 
     def import_character_assets(self) -> None:
         character_path = 'pink_man/'
@@ -100,6 +101,8 @@ class Player(pygame.sprite.Sprite):
 
     def jump(self) -> None:
         self.direction.y = self.jump_speed
+
+
     def get_input(self) -> None:#hàm này sẽ nhận vào các tương tác từ bàn phím
         keys = pygame.key.get_pressed()
 
@@ -114,8 +117,6 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
         if keys[pygame.K_w] and self.on_ground:
             self.jump()
-
-
 
 
     def update(self) -> None:
