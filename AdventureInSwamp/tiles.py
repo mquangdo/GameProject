@@ -78,11 +78,16 @@ class Enemy(AnimatedTile):
     def reverse(self):
         self.speed *= -1
 
-    def update(self, shift):
-        self.rect.x += shift
+    def update(self, shift_x):
+        self.rect.x += shift_x
         self.animate()
         self.reverse_image()
         self.move()
+
+class Trap(AnimatedTile):
+    def __init__(self, size , x, y, path: str):
+        super().__init__(size, x, y, path)
+
 
 class FlyEye(Enemy):
     def __init__(self, size, x, y, folder_path, shift_y):
@@ -114,4 +119,14 @@ class Rocket(Enemy):
     def __init__(self, size, x, y):
         super().__init__(size, x, y, 'graphics/fly_eye')
 
+class Crab(Enemy):
+    def __init__(self, size, x, y, folder_path, shift_y):
+        super().__init__(size, x, y, folder_path)
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(midbottom = (x, new_y))
+
+
+class Fire(Trap):
+    def __init__(self, size , x, y, path: str):
+        super().__init__(size, x, y, path)
 

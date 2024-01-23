@@ -3,7 +3,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire
 from player import Player
 from ui import UI
 
@@ -13,6 +13,7 @@ class Level:
     def __init__(self, level_data: dict, surface) -> None:
         self.display_surface = surface
         self.world_shift = 0
+        self.world_shift_1 = 0
 
         #UI setup
         self.ui = UI(self.display_surface)
@@ -54,9 +55,12 @@ class Level:
 
 
         #ladder
-        ladder: list = import_csv_layout(level_data['ladder'])
-        self.ladder_sprites = self.create_tile_group(ladder, 'ladder')
+        # ladder: list = import_csv_layout(level_data['ladder'])
+        # self.ladder_sprites = self.create_tile_group(ladder, 'ladder')
 
+
+
+        #ENEMIES
         # fly_eye
         fly_eye_layout: list = import_csv_layout(level_data['fly_eye'])
         self.fly_eye_sprites = self.create_tile_group(fly_eye_layout, 'fly_eye')
@@ -64,6 +68,21 @@ class Level:
         # slime
         slime_layout: list = import_csv_layout(level_data['slime'])
         self.slime_sprites = self.create_tile_group(slime_layout, 'slime')
+
+        #crab
+        crab_layout: list = import_csv_layout(level_data['crab'])
+        self.crab_sprites = self.create_tile_group(crab_layout, 'crab')
+
+
+
+
+
+        #TRAPS
+        #fire
+        fire_layout: list = import_csv_layout(level_data['fire'])
+        self.fire_sprites = self.create_tile_group(fire_layout, 'fire')
+
+
 
         # boundarie
         bound_layout: list = import_csv_layout(level_data['bound'])
@@ -147,26 +166,34 @@ class Level:
                         for index in image_index_list:
                             if val == str(index - 1):
                                 full_path = 'graphics/stone/' + str(index) + '.png'
-                                sprite = Stone(tile_size, x, y, full_path, 0, 46)
+                                sprite = Stone(tile_size, x, y, full_path, 0, tile_size)
 
                     if type == 'bush':
                         image_index_list = list(range(1, 10))
                         for index in image_index_list:
                             if val == str(index - 1):
                                 full_path = 'graphics/bush/' + str(index) + '.png'
-                                sprite = Bush(tile_size, x, y, full_path, 46, 46)
+                                sprite = Bush(tile_size, x, y, full_path, tile_size, tile_size)
                     if type == 'ladder':
                         if val == '0':
                             sprite = Ladder(tile_size, x, y, 'graphics/ladder/1.png' )
 
+                    #ENEMIES
                     if type == 'slime':
-                        sprite = Slime(tile_size, x, y, 'graphics/slime', 46)
+                        sprite = Slime(tile_size, x, y, 'graphics/slime', tile_size)
 
                     if type == 'fly_eye':
-                        sprite = FlyEye(tile_size, x, y, 'graphics/fly_eye', 46)
+                        sprite = FlyEye(tile_size, x, y, 'graphics/fly_eye', tile_size)
+
+                    if type == 'crab':
+                        sprite = Crab(tile_size, x, y, 'graphics/crab', tile_size)
 
                     if type == 'bound':
                         sprite = StaticTile(tile_size, x, y, pygame.transform.scale(pygame.image.load('graphics/bound/bound.png'),(tile_size, tile_size)))
+
+                    #TRAPS
+                    if type == 'fire':
+                        sprite = Fire(tile_size, x, y, 'graphics/fire')
 
                     sprite_group.add(sprite)
 
@@ -183,6 +210,9 @@ class Level:
             if pygame.sprite.spritecollide(slime, self.bound_sprites, False): #con tham so dau tien chi la 1 sprite
                 slime.reverse()
 
+        for crab in self.crab_sprites.sprites():
+            if pygame.sprite.spritecollide(crab, self.bound_sprites, False):  # con tham so dau tien chi la 1 sprite
+                crab.reverse()
 
     def player_setup(self, layout):
         for row_index, row in enumerate(layout):
@@ -269,23 +299,35 @@ class Level:
             self.world_shift = 8 / 1.8
             player.speed = 0
         elif player_x > screen_width - screen_width / 2 and direction_x > 0:
-            self.world_shift = -8 / 1.8
+            self.world_shift = - 8 / 1.8
             player.speed = 0
         else:
             self.world_shift = 0
             player.speed = 8
 
-    def climb(self):
+
+    def scroll_y(self):
         player = self.player.sprite
-        for sprites in self.terrain_sprites.sprites():
-            if sprites.rect.colliderect(player.rect):
-                player.rect.y -= 1
+        player_y = player.rect.y
+        direction_y = player.direction.y
+
+        if player_y > screen_height / 2 and direction_y < 0:
+            self.world_shift_1 = player.jump_speed
+            player.jump_speed = 0
+        elif player_y < screen_height / 2 and direction_y > 0:
+            self.world_shift_1 = - player.jump_speed
+            player.jump_speed = 0
+        else:
+            self.world_shift_1 = 0
+
 
 
     def check_enemy_collisions(self):
 
 
-        enemy_collision = pygame.sprite.spritecollide(self.player.sprite, self.slime_sprites, dokill = False) + pygame.sprite.spritecollide(self.player.sprite, self.fly_eye_sprites, dokill = False)
+        enemy_collision = (pygame.sprite.spritecollide(self.player.sprite, self.slime_sprites, dokill = False)
+                           + pygame.sprite.spritecollide(self.player.sprite, self.fly_eye_sprites, dokill = False)
+                           + pygame.sprite.spritecollide(self.player.sprite, self.crab_sprites, dokill = False))
         # for slime in self.slime_sprites.sprites():
         #     if slime.rect.colliderect(self.player.sprite.rect) and self.player.sprite.direction.y > 0: #các sprite sẽ có thuộc tính
         #         slime.kill()                                                                           #của player
@@ -293,15 +335,15 @@ class Level:
         #đoạn code này chạy được
 
         if enemy_collision:
-            for slime in enemy_collision:
-                slime_center = slime.rect.centery
-                slime_top = slime.rect.top
+            for enemy in enemy_collision:
+                slime_center = enemy.rect.centery
+                slime_top = enemy.rect.top
                 player_bottom = self.player.sprite.rect.bottom
                 if slime_top < player_bottom < slime_center and self.player.sprite.direction.y >= 0:
                     self.player.sprite.direction.y = - 8
-                    explosion_sprite = Effect(tile_size ,slime.rect.centerx, slime.rect.centery)
+                    explosion_sprite = Effect(tile_size ,enemy.rect.centerx, enemy.rect.centery)
                     self.explosion_sprite.add(explosion_sprite)
-                    slime.kill()
+                    enemy.kill()
                 else:
                     self.player.sprite.get_damage()
 
@@ -309,6 +351,7 @@ class Level:
     def check_death(self):
         if self.player.sprite.current_health <= 0:
             self.display_surface.fill('Black')
+
 
     def run(self):
 
@@ -341,12 +384,14 @@ class Level:
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.player.draw(self.display_surface)
-        self.climb()
+
 
         #ladder
-        self.ladder_sprites.draw(self.display_surface)
-        self.ladder_sprites.update(self.world_shift)
+        # self.ladder_sprites.draw(self.display_surface)
+        # self.ladder_sprites.update(self.world_shift)
 
+
+        #ENEMIES
         #slime
         self.slime_sprites.draw(self.display_surface)
         self.slime_sprites.update(self.world_shift)
@@ -355,9 +400,18 @@ class Level:
         self.fly_eye_sprites.draw(self.display_surface)
         self.fly_eye_sprites.update(self.world_shift)
 
+        #crab
+        self.crab_sprites.draw(self.display_surface)
+        self.crab_sprites.update(self.world_shift)
+
         #boundarie
         self.bound_sprites.update(self.world_shift)
         self.collision()
+
+        #TRAPS
+        self.fire_sprites.draw(self.display_surface)
+        self.fire_sprites.update(self.world_shift)
+
 
 
         #ui
@@ -380,3 +434,4 @@ class Level:
 
         #check_death
         self.check_death()
+

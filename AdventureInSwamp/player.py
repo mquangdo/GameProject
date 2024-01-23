@@ -20,9 +20,10 @@ class Player(pygame.sprite.Sprite):
 
         #player movement
         self.direction = pygame.math.Vector2(0, 0)
-        self.speed = 100
+        self.speed = 8
         self.gravity = 0.8
-        self.jump_speed = -14
+        self.jump_speed = -13
+        self.speed_rate = 8
 
         #player status
         self.status = 'idle'
@@ -32,6 +33,11 @@ class Player(pygame.sprite.Sprite):
         self.on_left = False
         self.on_right = False
         self.on_air = False
+        self.double_jump = False
+
+        self.jumping = False
+        self.double_jumping = False
+        self.jump_count = 300
 
 
         #collisions
@@ -155,6 +161,27 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_w] and self.on_ground:
             self.jump()
 
+        # if keys[pygame.K_w] and self.double_jump and self.on_air:
+        #     self.jump()
+        #     self.double_jump = False
+
+    def reset_jump_count(self):
+        if self.on_ground:
+            self.jump_count = 300
+
+
+
+    # def double(self):
+    #     keys = pygame.key.get_pressed()
+    #     if keys[pygame.K_w] and self.on_air and self.double_jump:
+    #         self.jump()
+    #         self.double_jump = False
+    #
+    # def double_jump_timer(self):
+    #     if self.on_air and self.on_ground:
+    #         self.on_air = False
+
+
 
 
     def update(self) -> None:
@@ -165,3 +192,6 @@ class Player(pygame.sprite.Sprite):
         self.get_status()
         self.animate()
         self.invincible_timer()
+        self.reset_jump_count()
+        # self.double()
+        # self.double_jump_timer()
