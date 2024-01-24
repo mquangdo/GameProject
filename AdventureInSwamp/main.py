@@ -32,6 +32,7 @@ background_rect = background.get_rect(topleft = (0, 0))
 
 map0 = Map0(level_0)
 map1 = Map1(level_1)
+map2 = Map2(level_2)
 
 while True:
     for event in pygame.event.get():
@@ -46,5 +47,7 @@ while True:
     else:
         if map1.switch_level():
             map1.run()
+        else:
+            map2.run()
     pygame.display.update()
     clock.tick(60)

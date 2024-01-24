@@ -39,4 +39,8 @@ level_2 = {'terrain':'2/level_2_terrain.csv',
            'willow': '2/level_2_willow.csv',
            'stone': '2/level_2_stone.csv',
             'bush':'2/level_2_bush.csv',
-           'saw': '1/level_1_saw.csv'}
+           'saw': '2/level_2_saw.csv',
+            'crab': '2/level_2_crab.csv',
+            'portal': '2/level_2_portal.csv',
+           'fire': '2/level_2_fire.csv'
+           }
