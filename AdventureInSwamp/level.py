@@ -3,7 +3,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw
 from player import Player
 from ui import UI
 
@@ -17,7 +17,6 @@ class Level:
 
         #UI setup
         self.ui = UI(self.display_surface)
-        self.coin = 0
         self.max_health = 100
         self.current_health = 100
 
@@ -82,7 +81,9 @@ class Level:
         fire_layout: list = import_csv_layout(level_data['fire'])
         self.fire_sprites = self.create_tile_group(fire_layout, 'fire')
 
-
+        #saw
+        saw_layout: list = import_csv_layout(level_data['saw'])
+        self.saw_sprites = self.create_tile_group(saw_layout, 'saw')
 
         # boundarie
         bound_layout: list = import_csv_layout(level_data['bound'])
@@ -90,6 +91,10 @@ class Level:
 
         #effect
         self.explosion_sprite = pygame.sprite.Group() #có thể tùy ý tạo các group bên ngoài rồi draw các thứ
+
+        #portal
+        portal_layout: list = import_csv_layout(level_data['portal'])
+        self.portal_sprites = self.create_tile_group(portal_layout, 'portal')
 
         #rocket
         # self.rocket_sprite = self.fire_rocket()
@@ -194,6 +199,12 @@ class Level:
                     #TRAPS
                     if type == 'fire':
                         sprite = Fire(tile_size, x, y, 'graphics/fire')
+
+                    if type == 'portal':
+                        sprite = Portal(tile_size, x, y, 'graphics/portal', tile_size)
+
+                    if type == 'saw':
+                        sprite = Saw(tile_size, x, y, 'graphics/saw')
 
                     sprite_group.add(sprite)
 
@@ -352,6 +363,10 @@ class Level:
         if self.player.sprite.current_health <= 0:
             self.display_surface.fill('Black')
 
+    def hit_saw(self):
+        for saw in self.saw_sprites.sprites():
+            if saw.rect.colliderect(self.player.sprite.rect):
+                self.player.sprite.get_damage()
 
     def run(self):
 
@@ -412,11 +427,16 @@ class Level:
         self.fire_sprites.draw(self.display_surface)
         self.fire_sprites.update(self.world_shift)
 
+        self.saw_sprites.draw(self.display_surface)
+        self.saw_sprites.update(self.world_shift)
+        self.hit_saw()
 
+        #portal
+        self.portal_sprites.draw(self.display_surface)
+        self.portal_sprites.update(self.world_shift)
 
-        #ui
+        #health bar
         self.ui.show_health(self.player.sprite.current_health, 100)
-        self.ui.show_coin(self.coin)
 
         self.check_enemy_collisions()
         self.explosion_sprite.draw(self.display_surface)

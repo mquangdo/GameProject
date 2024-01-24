@@ -63,6 +63,13 @@ class Ladder(StaticTile):
         super().__init__(size, x, y, pygame.image.load(path))
 
 
+class Portal(AnimatedTile):
+    def __init__(self, size, x, y, path, shift_y):
+        super().__init__(size, x, y, path)
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(midbottom = (x, new_y))
+
+
 class Enemy(AnimatedTile):
     def __init__(self, size, x, y, path: str):
         super().__init__(size, x, y,path)
@@ -130,3 +137,6 @@ class Fire(Trap):
     def __init__(self, size , x, y, path: str):
         super().__init__(size, x, y, path)
 
+class Saw(Trap):
+    def __init__(self, size, x, y, path: str):
+        super().__init__(size, x, y, path)
