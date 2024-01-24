@@ -26,15 +26,15 @@
             "scale": 0.5,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 3701,
+                "x": 3699,
                 "y": 167
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_1.tmx": {
             "scale": 0.5,
-            "selectedLayer": 9,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 779,
+                "x": 3749,
                 "y": 229
             }
         },
@@ -42,7 +42,7 @@
             "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 193,
+                "x": 319,
                 "y": 271
             }
         },
@@ -62,6 +62,7 @@
             "scaleInEditor": 1
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/terrain.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 1
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/tree.tsx": {
@@ -79,9 +80,9 @@
         },
         "level_data/untitled.tmx": {
             "scale": 0.75,
-            "selectedLayer": 9,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 811.3333333333333,
+                "x": 144.66666666666663,
                 "y": 305.99999999999994
             }
         },
