@@ -140,3 +140,14 @@ class Fire(Trap):
 class Saw(Trap):
     def __init__(self, size, x, y, path: str):
         super().__init__(size, x, y, path)
+
+class MoveSaw(Enemy):
+    def __init__(self, size, x, y, folder_path, shift_y):
+        super().__init__(size, x, y, folder_path)
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(midbottom = (x, new_y))
+
+class Banana(AnimatedTile):
+    def __init__(self, size, x, y, path):
+        super().__init__(size, x, y, path)
+

@@ -12,7 +12,9 @@ level_0 = {'terrain':'0/level_0_terrain.csv',
            'crab': '0/level_0_crab.csv',
            'fire': '0/level_0_fire.csv',
            'portal': '0/level_0_portal.csv',
-           'saw': '0/level_0_saw.csv'}
+           'saw': '0/level_0_saw.csv',
+           'move_saw':'0/level_0_move_saw.csv',
+           'banana':'0/level_0_banana.csv'}
 
 level_1 = {'terrain':'1/level_1_terrain.csv',
            'tree': '1/level_1_tree.csv',
@@ -27,7 +29,9 @@ level_1 = {'terrain':'1/level_1_terrain.csv',
            'crab': '1/level_1_crab.csv',
            'fire': '1/level_1_fire.csv',
            'portal': '1/level_1_portal.csv',
-           'saw': '1/level_1_saw.csv'}
+           'saw': '1/level_1_saw.csv',
+           'move_saw':'1/level_1_move_saw.csv',
+           'banana':'1/level_1_banana.csv'}
 
 level_2 = {'terrain':'2/level_2_terrain.csv',
            'tree': '2/level_2_tree.csv',
@@ -42,5 +46,7 @@ level_2 = {'terrain':'2/level_2_terrain.csv',
            'saw': '2/level_2_saw.csv',
             'crab': '2/level_2_crab.csv',
             'portal': '2/level_2_portal.csv',
-           'fire': '2/level_2_fire.csv'
+           'fire': '2/level_2_fire.csv',
+            'move_saw':'2/level_2_move_saw.csv',
+            'banana':'2/level_2_banana.csv'
            }

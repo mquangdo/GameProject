@@ -3,7 +3,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana
 from player import Player
 from ui import UI
 
@@ -85,6 +85,10 @@ class Level:
         saw_layout: list = import_csv_layout(level_data['saw'])
         self.saw_sprites = self.create_tile_group(saw_layout, 'saw')
 
+        move_saw_layout: list = import_csv_layout(level_data['move_saw'])
+        self.move_saw_sprites = self.create_tile_group(move_saw_layout, 'move_saw')
+
+
         # boundarie
         bound_layout: list = import_csv_layout(level_data['bound'])
         self.bound_sprites = self.create_tile_group(bound_layout, 'bound')
@@ -103,6 +107,9 @@ class Level:
         # self.rocket_timer = 500
         # self.fire_time = 0
 
+        #fruits
+        banana_layout: list = import_csv_layout(level_data['banana'])
+        self.banana_sprites = self.create_tile_group(banana_layout, 'banana')
 
 
 
@@ -206,6 +213,11 @@ class Level:
                     if type == 'saw':
                         sprite = Saw(tile_size, x, y, 'graphics/saw')
 
+                    if type == 'move_saw':
+                        sprite = MoveSaw(tile_size, x, y, 'graphics/saw', tile_size)
+
+                    if type == 'banana':
+                        sprite = Banana(tile_size, x, y, 'graphics/banana')
                     sprite_group.add(sprite)
 
         return sprite_group
@@ -224,6 +236,10 @@ class Level:
         for crab in self.crab_sprites.sprites():
             if pygame.sprite.spritecollide(crab, self.bound_sprites, False):  # con tham so dau tien chi la 1 sprite
                 crab.reverse()
+
+        for move_saw in self.move_saw_sprites.sprites():
+            if pygame.sprite.spritecollide(move_saw, self.bound_sprites, False):  # con tham so dau tien chi la 1 sprite
+                move_saw.reverse()
 
     def player_setup(self, layout):
         for row_index, row in enumerate(layout):
@@ -364,12 +380,21 @@ class Level:
             self.display_surface.fill('Black')
 
     def hit_saw(self):
-        for saw in self.saw_sprites.sprites():
+        for saw in self.saw_sprites.sprites() + self.move_saw_sprites.sprites():
             if saw.rect.colliderect(self.player.sprite.rect):
                 self.player.sprite.get_damage()
 
-    def run(self):
+    def eat_banana(self):
+        player = self.player.sprite
+        for banana in self.banana_sprites.sprites():
+            if banana.rect.colliderect(self.player.sprite.rect):
+                banana.kill()
+                player.current_health += 10
+                if player.current_health >= 100:
+                    player.current_health = 100
 
+
+    def run(self):
         #terrain
         self.terrain_sprites.draw(self.display_surface)
         self.terrain_sprites.update(self.world_shift)
@@ -431,12 +456,24 @@ class Level:
         self.saw_sprites.update(self.world_shift)
         self.hit_saw()
 
+        self.move_saw_sprites.draw(self.display_surface)
+        self.move_saw_sprites.update(self.world_shift)
+
+        #fruits
+        self.banana_sprites.draw(self.display_surface)
+        self.banana_sprites.update(self.world_shift)
+        self.eat_banana()
+
+
+
         #portal
         self.portal_sprites.draw(self.display_surface)
         self.portal_sprites.update(self.world_shift)
 
         #health bar
         self.ui.show_health(self.player.sprite.current_health, 100)
+
+
 
         self.check_enemy_collisions()
         self.explosion_sprite.draw(self.display_surface)
