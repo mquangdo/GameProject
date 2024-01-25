@@ -3,7 +3,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator
 from player import Player
 from ui import UI
 
@@ -111,6 +111,9 @@ class Level:
         banana_layout: list = import_csv_layout(level_data['banana'])
         self.banana_sprites = self.create_tile_group(banana_layout, 'banana')
 
+        #elevator
+        elevator_layout: list = import_csv_layout(level_data['elevator'])
+        self.elevator_sprites = self.create_tile_group(elevator_layout, 'elevator')
 
 
 
@@ -218,6 +221,9 @@ class Level:
 
                     if type == 'banana':
                         sprite = Banana(tile_size, x, y, 'graphics/banana')
+
+                    if type == 'elevator':
+                        sprite = Elevator(tile_size, x, y, 'graphics/elevator')
                     sprite_group.add(sprite)
 
         return sprite_group
@@ -240,6 +246,10 @@ class Level:
         for move_saw in self.move_saw_sprites.sprites():
             if pygame.sprite.spritecollide(move_saw, self.bound_sprites, False):  # con tham so dau tien chi la 1 sprite
                 move_saw.reverse()
+
+        for elevator in self.elevator_sprites.sprites():
+            if pygame.sprite.spritecollide(elevator, self.bound_sprites, dokill = False):
+                elevator.reverse()
 
     def player_setup(self, layout):
         for row_index, row in enumerate(layout):
@@ -295,7 +305,12 @@ class Level:
         player = self.player.sprite #player.rect = self.player.sprite.rect la rect cua moi sprite
         player.apply_gravity()
 
-        collidable_sprite = self.terrain_sprites.sprites() + self.stone_sprites.sprites()
+        collidable_sprite = self.terrain_sprites.sprites() + self.stone_sprites.sprites() + self.elevator_sprites.sprites()
+        elevator_sprite = self.elevator_sprites.sprites()
+
+        # for elevator in elevator_sprite:
+        #     if player.rect.bottom - elevator.rect.top < 20:
+        #         player.on_ground = True
 
         for sprite in collidable_sprite: #lay ra cac sprite trong tiles
             if sprite.rect.colliderect(player.rect):#kiem tra xem neu sprite nay va cham voi player.rect
@@ -317,6 +332,8 @@ class Level:
         if player.on_ceiling and player.direction.y > player.gravity:  #on_ceiling = True và đang rơi do ta không thể nhảy được nữa neên chỉ xét đều kiện đang rơi
             player.on_ceiling = False
 
+
+
     def scroll_x(self) -> None:#to scroll the map
         player = self.player.sprite##.sprite attribute cua lop GroupSingle
         player_x = player.rect.centerx#Lay hoanh do x tai trung tam cua surface player_x
@@ -332,23 +349,6 @@ class Level:
             self.world_shift = 0
             player.speed = 8
 
-
-    def scroll_y(self):
-        player = self.player.sprite
-        player_y = player.rect.y
-        direction_y = player.direction.y
-
-        if player_y > screen_height / 2 and direction_y < 0:
-            self.world_shift_1 = player.jump_speed
-            player.jump_speed = 0
-        elif player_y < screen_height / 2 and direction_y > 0:
-            self.world_shift_1 = - player.jump_speed
-            player.jump_speed = 0
-        else:
-            self.world_shift_1 = 0
-
-
-
     def check_enemy_collisions(self):
 
 
@@ -363,10 +363,10 @@ class Level:
 
         if enemy_collision:
             for enemy in enemy_collision:
-                slime_center = enemy.rect.centery
-                slime_top = enemy.rect.top
+                enemy_center = enemy.rect.centery
+                enemy_top = enemy.rect.top
                 player_bottom = self.player.sprite.rect.bottom
-                if slime_top < player_bottom < slime_center and self.player.sprite.direction.y >= 0:
+                if (enemy_top < player_bottom < enemy_center and self.player.sprite.direction.y >= 0):
                     self.player.sprite.direction.y = - 8
                     explosion_sprite = Effect(tile_size ,enemy.rect.centerx, enemy.rect.centery)
                     self.explosion_sprite.add(explosion_sprite)
@@ -384,6 +384,20 @@ class Level:
             if saw.rect.colliderect(self.player.sprite.rect):
                 self.player.sprite.get_damage()
 
+    def hit_candle(self):
+        candle_collision = pygame.sprite.spritecollide(self.player.sprite, self.fire_sprites, dokill = False)
+        if candle_collision:
+            for candle in candle_collision:
+                # candle_center = candle.rect.centery
+                candle_top = candle.rect.top
+                player_bottom = self.player.sprite.rect.bottom
+                if candle_top < player_bottom and self.player.sprite.direction.y > 0:
+                    self.player.sprite.get_damage()
+    def stone_blow(self):
+        player = self.player.sprite
+        for stone in self.stone_sprites.sprites():
+                if stone.rect.top == player.rect.midbottom:
+                    stone.kill()
     def eat_banana(self):
         player = self.player.sprite
         for banana in self.banana_sprites.sprites():
@@ -415,6 +429,7 @@ class Level:
         #stone
         self.stone_sprites.draw(self.display_surface)
         self.stone_sprites.update(self.world_shift)
+        # self.stone_blow()
 
         # player
         self.player.update()
@@ -451,6 +466,7 @@ class Level:
         #TRAPS
         self.fire_sprites.draw(self.display_surface)
         self.fire_sprites.update(self.world_shift)
+        self.hit_candle()
 
         self.saw_sprites.draw(self.display_surface)
         self.saw_sprites.update(self.world_shift)
@@ -464,6 +480,9 @@ class Level:
         self.banana_sprites.update(self.world_shift)
         self.eat_banana()
 
+        #elevator
+        self.elevator_sprites.draw(self.display_surface)
+        self.elevator_sprites.update(self.world_shift)
 
 
         #portal

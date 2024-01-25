@@ -151,3 +151,10 @@ class Banana(AnimatedTile):
     def __init__(self, size, x, y, path):
         super().__init__(size, x, y, path)
 
+
+class Elevator(Enemy):
+    def __init__(self, size, x, y, path):
+        super().__init__(size, x, y, path)
+
+    def move(self):
+        self.rect.y += self.speed

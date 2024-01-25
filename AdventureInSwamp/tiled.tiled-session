@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_2.tmx",
+    "activeFile": "level_data/untitled.tmx",
     "expandedProjectPaths": [
-        "tile_set",
         ".",
-        "level_data"
+        "level_data",
+        "tile_set"
     ],
     "fileStates": {
         "": {
@@ -26,24 +26,24 @@
             "scale": 0.5,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 3689,
-                "y": 163
+                "x": 3681,
+                "y": 157
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_1.tmx": {
             "scale": 0.5,
-            "selectedLayer": 5,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 1055,
-                "y": -21
+                "x": 849,
+                "y": 319
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_2.tmx": {
             "scale": 0.5,
-            "selectedLayer": 9,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 2279,
-                "y": 267
+                "x": 1093,
+                "y": 261
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/bound.tsx": {
@@ -75,14 +75,14 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 683.3333333333334,
-                "y": 453.0303030303031
+                "y": 443.9393939393939
             }
         },
         "level_data/untitled.tmx": {
             "scale": 0.75,
-            "selectedLayer": 8,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 1416.6666666666665,
+                "x": 579.3333333333333,
                 "y": 304.66666666666674
             }
         },
@@ -116,6 +116,9 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "tile_set/elevator.tsx": {
+            "dynamicWrapping": true
+        },
         "tile_set/fire.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,
@@ -145,6 +148,10 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "tile_set/spear.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "tile_set/stone.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,
@@ -171,8 +178,8 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/2",
-    "last.imagePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/graphics/banana",
+    "last.exportedFilePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/0",
+    "last.imagePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/graphics/elevator",
     "map.height": 14,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
@@ -196,7 +203,8 @@
         "tile_set/portal.tsx",
         "tile_set/saw.tsx",
         "level_data/untitled.tmx",
-        "tile_set/banana.tsx"
+        "tile_set/banana.tsx",
+        "tile_set/spear.tsx"
     ],
     "project": "tiled.tiled-project",
     "recentFiles": [
@@ -211,7 +219,7 @@
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/chest.tsx",
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_0.tmx",
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_1.tmx",
-        "tile_set/banana.tsx"
+        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
