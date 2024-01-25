@@ -1,9 +1,8 @@
 import math
-
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag
 from player import Player
 from ui import UI
 
@@ -45,6 +44,10 @@ class Level:
         #bush
         bush_layout: list = import_csv_layout(level_data['bush'])
         self.bush_sprites = self.create_tile_group(bush_layout, 'bush')
+
+        #flag
+        flag_layout: list = import_csv_layout(level_data['flag'])
+        self.flag_sprites = self.create_tile_group(flag_layout, 'flag')
 
 
         # player
@@ -193,6 +196,9 @@ class Level:
                         if val == '0':
                             sprite = Ladder(tile_size, x, y, 'graphics/ladder/1.png' )
 
+                    if type == 'flag':
+                        sprite = Flag(tile_size, x, y, 'graphics/flag', tile_size)
+
                     #ENEMIES
                     if type == 'slime':
                         sprite = Slime(tile_size, x, y, 'graphics/slime', tile_size)
@@ -225,6 +231,7 @@ class Level:
                     if type == 'elevator':
                         sprite = Elevator(tile_size, x, y, 'graphics/elevator')
                     sprite_group.add(sprite)
+
 
         return sprite_group
 
@@ -430,6 +437,10 @@ class Level:
         self.stone_sprites.draw(self.display_surface)
         self.stone_sprites.update(self.world_shift)
         # self.stone_blow()
+
+        #flag
+        self.flag_sprites.draw(self.display_surface)
+        self.flag_sprites.update(self.world_shift)
 
         # player
         self.player.update()

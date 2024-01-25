@@ -69,6 +69,12 @@ class Portal(AnimatedTile):
         new_y = y + shift_y
         self.rect = self.image.get_rect(midbottom = (x, new_y))
 
+class Flag(AnimatedTile):
+    def __init__(self, size, x, y, path, shift_y):
+        super().__init__(size, x, y, path)
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(midbottom=(x, new_y))
+
 
 class Enemy(AnimatedTile):
     def __init__(self, size, x, y, path: str):
