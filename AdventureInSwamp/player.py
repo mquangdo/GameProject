@@ -46,7 +46,6 @@ class Player(pygame.sprite.Sprite):
         self.hurt_time = 0
 
         #ui setup
-        self.coin = 0
         self.max_health = 100
         self.current_health = 100
 

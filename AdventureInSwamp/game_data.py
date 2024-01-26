@@ -16,7 +16,9 @@ level_0 = {'terrain':'0/level_0_terrain.csv',
            'move_saw':'0/level_0_move_saw.csv',
            'banana':'0/level_0_banana.csv',
            'elevator': '0/level_0_elevator.csv',
-           'flag': '0/level_0_flag.csv'}
+           'flag': '0/level_0_flag.csv',
+           'spike': '0/level_0_spike.csv'
+           }
 
 level_1 = {'terrain':'1/level_1_terrain.csv',
            'tree': '1/level_1_tree.csv',
@@ -35,7 +37,8 @@ level_1 = {'terrain':'1/level_1_terrain.csv',
            'move_saw':'1/level_1_move_saw.csv',
            'banana':'1/level_1_banana.csv',
            'elevator': '1/level_1_elevator.csv',
-           'flag': '1/level_1_flag.csv'}
+           'flag': '1/level_1_flag.csv',
+           'spike':'1/level_1_spike.csv'}
 
 level_2 = {'terrain':'2/level_2_terrain.csv',
            'tree': '2/level_2_tree.csv',
@@ -54,4 +57,6 @@ level_2 = {'terrain':'2/level_2_terrain.csv',
             'move_saw':'2/level_2_move_saw.csv',
             'banana':'2/level_2_banana.csv',
             'elevator': '2/level_2_elevator.csv',
-           'flag': '2/level_2_flag.csv'}
+           'flag': '2/level_2_flag.csv',
+           'spike': '2/level_2_spike.csv'
+           }

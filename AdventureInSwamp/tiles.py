@@ -1,6 +1,7 @@
 import pygame
 from supports import import_folder, import_cut_graphics
 import random
+import numpy as np
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, size: int, x, y):
@@ -62,8 +63,14 @@ class Ladder(StaticTile):
     def __init__(self, size, x, y, path):
         super().__init__(size, x, y, pygame.image.load(path))
 
+class Spike(StaticTile):
+    def __init__(self, size, x, y, path: str, shift_y):
+        super().__init__(size, x, y, pygame.image.load(path))
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(midbottom = (x, new_y))
 
 class Portal(AnimatedTile):
+
     def __init__(self, size, x, y, path, shift_y):
         super().__init__(size, x, y, path)
         new_y = y + shift_y
@@ -74,7 +81,6 @@ class Flag(AnimatedTile):
         super().__init__(size, x, y, path)
         new_y = y + shift_y
         self.rect = self.image.get_rect(midbottom=(x, new_y))
-
 
 class Enemy(AnimatedTile):
     def __init__(self, size, x, y, path: str):
@@ -146,6 +152,7 @@ class Fire(Trap):
 class Saw(Trap):
     def __init__(self, size, x, y, path: str):
         super().__init__(size, x, y, path)
+
 
 class MoveSaw(Enemy):
     def __init__(self, size, x, y, folder_path, shift_y):

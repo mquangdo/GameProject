@@ -2,7 +2,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag, Spike
 from player import Player
 from ui import UI
 
@@ -50,6 +50,8 @@ class Level:
         self.flag_sprites = self.create_tile_group(flag_layout, 'flag')
 
 
+
+
         # player
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
@@ -88,8 +90,13 @@ class Level:
         saw_layout: list = import_csv_layout(level_data['saw'])
         self.saw_sprites = self.create_tile_group(saw_layout, 'saw')
 
+        #move_saw
         move_saw_layout: list = import_csv_layout(level_data['move_saw'])
         self.move_saw_sprites = self.create_tile_group(move_saw_layout, 'move_saw')
+
+        #spike
+        spike_layout: list = import_csv_layout(level_data['spike'])
+        self.spike_sprites = self.create_tile_group(spike_layout, 'spike')
 
 
         # boundarie
@@ -230,6 +237,9 @@ class Level:
 
                     if type == 'elevator':
                         sprite = Elevator(tile_size, x, y, 'graphics/elevator')
+
+                    if type == 'spike':
+                        sprite = Spike(tile_size, x, y, 'graphics/spike/spike.png', tile_size)
                     sprite_group.add(sprite)
 
 
@@ -384,7 +394,9 @@ class Level:
 
     def check_death(self):
         if self.player.sprite.current_health <= 0:
-            self.display_surface.fill('Black')
+            return True
+        else:
+            return False
 
     def hit_saw(self):
         for saw in self.saw_sprites.sprites() + self.move_saw_sprites.sprites():
@@ -400,6 +412,7 @@ class Level:
                 player_bottom = self.player.sprite.rect.bottom
                 if candle_top < player_bottom and self.player.sprite.direction.y > 0:
                     self.player.sprite.get_damage()
+
     def stone_blow(self):
         player = self.player.sprite
         for stone in self.stone_sprites.sprites():
@@ -413,6 +426,18 @@ class Level:
                 player.current_health += 10
                 if player.current_health >= 100:
                     player.current_health = 100
+
+    def switch_level(self):
+        for sprites in self.portal_sprites.sprites():
+            if sprites.rect.colliderect(self.player.sprite.rect):
+                return False
+            else:
+                return True
+
+    def hit_spike(self):
+        for spike in self.spike_sprites.sprites():
+            if spike.rect.colliderect(self.player.sprite.rect):
+                self.player.sprite.get_damage()
 
 
     def run(self):
@@ -481,10 +506,14 @@ class Level:
 
         self.saw_sprites.draw(self.display_surface)
         self.saw_sprites.update(self.world_shift)
-        self.hit_saw()
 
         self.move_saw_sprites.draw(self.display_surface)
         self.move_saw_sprites.update(self.world_shift)
+        self.hit_saw()
+
+        self.spike_sprites.draw(self.display_surface)
+        self.spike_sprites.update(self.world_shift)
+        self.hit_spike()
 
         #fruits
         self.banana_sprites.draw(self.display_surface)
