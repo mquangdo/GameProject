@@ -32,8 +32,6 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-
-    screen.fill('grey')
     screen.blit(background, background_rect)
 
     if map0.switch_level():
@@ -42,6 +40,8 @@ while True:
         if map1.switch_level():
             map1.run()
         else:
-            map2.run()
+            if map2.switch_level():
+                map2.run()
+
     pygame.display.update()
     clock.tick(60)

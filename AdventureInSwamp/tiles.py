@@ -59,6 +59,14 @@ class Bush(StaticTile):
         new_y = y + shift_y
         self.rect = self.image.get_rect(bottomright = (new_x, new_y))
 
+
+class Ridge(StaticTile):
+    def __init__(self, size, x, y, path: str, shift_y):
+        super().__init__(size, x, y, pygame.image.load(path))
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(bottomleft=(x, new_y))
+
+
 class Ladder(StaticTile):
     def __init__(self, size, x, y, path):
         super().__init__(size, x, y, pygame.image.load(path))
@@ -77,6 +85,12 @@ class Portal(AnimatedTile):
         self.rect = self.image.get_rect(midbottom = (x, new_y))
 
 class Flag(AnimatedTile):
+    def __init__(self, size, x, y, path, shift_y):
+        super().__init__(size, x, y, path)
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(midbottom=(x, new_y))
+
+class Chest(AnimatedTile):
     def __init__(self, size, x, y, path, shift_y):
         super().__init__(size, x, y, path)
         new_y = y + shift_y
@@ -171,3 +185,4 @@ class Elevator(Enemy):
 
     def move(self):
         self.rect.y += self.speed
+

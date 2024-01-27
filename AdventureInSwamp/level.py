@@ -2,7 +2,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag, Spike
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag, Spike, Ridge, Chest
 from player import Player
 from ui import UI
 
@@ -24,6 +24,8 @@ class Level:
         self.timer = 400
         self.hurt_time = 0
 
+        self.win = False
+
 
         #terrain_layout
         terrain_layout: list = import_csv_layout(level_data['terrain'])#level_data['terrain'] là 1 đường dẫn trong dictionary
@@ -37,6 +39,10 @@ class Level:
         willow_layout: list = import_csv_layout(level_data['willow'])
         self.willow_sprites = self.create_tile_group(willow_layout, 'willow')
 
+        #ridge layout
+        ridge_layout: list = import_csv_layout(level_data['ridge'])
+        self.ridge_sprites = self.create_tile_group(ridge_layout, 'ridge')
+
         #stone_layout
         stone_layout: list = import_csv_layout(level_data['stone'])
         self.stone_sprites = self.create_tile_group(stone_layout, 'stone')
@@ -49,8 +55,9 @@ class Level:
         flag_layout: list = import_csv_layout(level_data['flag'])
         self.flag_sprites = self.create_tile_group(flag_layout, 'flag')
 
-
-
+        #chest
+        chest_layout: list = import_csv_layout(level_data['chest'])
+        self.chest_sprites = self.create_tile_group(chest_layout, 'chest')
 
         # player
         player_layout = import_csv_layout(level_data['player'])
@@ -240,6 +247,17 @@ class Level:
 
                     if type == 'spike':
                         sprite = Spike(tile_size, x, y, 'graphics/spike/spike.png', tile_size)
+
+                    if type == 'ridge':
+                        image_index_list = list(range(1, 7))
+                        for index in image_index_list:
+                            if val == str(index + 11):
+                                full_path = 'graphics/ridge/' + str(index) + '.png'
+                                sprite = Ridge(tile_size, x, y, full_path, tile_size)
+
+                    if type == 'chest':
+                        sprite = Chest(tile_size, x, y, 'graphics/chest', tile_size)
+
                     sprite_group.add(sprite)
 
 
@@ -394,9 +412,27 @@ class Level:
 
     def check_death(self):
         if self.player.sprite.current_health <= 0:
-            return True
-        else:
-            return False
+            self.show_death_screen()
+
+    def check_win(self):
+        for chest in self.chest_sprites.sprites():
+            if chest.rect.colliderect(self.player.sprite.rect):
+                self.win = True
+
+
+    def show_win_screen(self):
+       if self.win:
+            self.display_surface.fill('black')
+
+    def show_death_screen(self):
+        player_surf = pygame.image.load('pink_man/idle/idle_01.png')
+        player_rect = player_surf.get_rect(center = (screen_width / 2 - 100, screen_height / 2 + 50))
+        text_font = pygame.font.Font('graphics/font/Pixeltype.ttf', 100)
+        text_surface = text_font.render('You lose!', True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center = (screen_width / 2, screen_height / 2))
+        self.display_surface.fill('black')
+        self.display_surface.blit(text_surface, text_rect)
+        self.display_surface.blit(pygame.transform.scale(player_surf, (200,200)), player_rect)
 
     def hit_saw(self):
         for saw in self.saw_sprites.sprites() + self.move_saw_sprites.sprites():
@@ -458,6 +494,9 @@ class Level:
         self.willow_sprites.draw(self.display_surface)
         self.willow_sprites.update(self.world_shift)
 
+        self.ridge_sprites.draw(self.display_surface)
+        self.ridge_sprites.update(self.world_shift)
+
         #stone
         self.stone_sprites.draw(self.display_surface)
         self.stone_sprites.update(self.world_shift)
@@ -466,6 +505,9 @@ class Level:
         #flag
         self.flag_sprites.draw(self.display_surface)
         self.flag_sprites.update(self.world_shift)
+
+        self.chest_sprites.draw(self.display_surface)
+        self.chest_sprites.update(self.world_shift)
 
         # player
         self.player.update()
@@ -550,4 +592,6 @@ class Level:
 
         #check_death
         self.check_death()
+        self.check_win()
+        self.show_win_screen()
 
