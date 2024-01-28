@@ -2,7 +2,6 @@ import pygame, sys
 from settings import *
 from level import Level
 from game_data import level_0, level_1, level_2
-from ui import UI
 
 class Map0(Level):
     def __init__(self, level_0):

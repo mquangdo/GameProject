@@ -2,7 +2,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag, Spike, Ridge, Chest
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag, Spike, Ridge, Chest, Box
 from player import Player
 from ui import UI
 
@@ -54,6 +54,9 @@ class Level:
         #flag
         flag_layout: list = import_csv_layout(level_data['flag'])
         self.flag_sprites = self.create_tile_group(flag_layout, 'flag')
+
+        box_layout: list = import_csv_layout(level_data['box'])
+        self.box_sprites = self.create_tile_group(box_layout, 'box')
 
         #chest
         chest_layout: list = import_csv_layout(level_data['chest'])
@@ -168,19 +171,19 @@ class Level:
 
                     if type == 'tree':
                         if val == '0':
-                            sprite = Tree(tile_size, x, y, 'graphics/tree/1.png', 46)
+                            sprite = Tree(tile_size, x, y, 'graphics/tree/3.png', 46)
                         if val == '1':
                             sprite = Tree(tile_size, x, y, 'graphics/tree/2.png', 46)
                         if val == '2':
-                            sprite = Tree(tile_size, x, y, 'graphics/tree/3.png', 46)
+                            sprite = Tree(tile_size, x, y, 'graphics/tree/1.png', 46)
 
                     if type == 'willow':
                         if val == '0':
-                            sprite = Tree(tile_size, x, y, 'graphics/willow/1.png', 46)
+                            sprite = Tree(tile_size, x, y, 'graphics/willow/3.png', 46)
                         if val == '1':
                             sprite = Tree(tile_size, x, y, 'graphics/willow/2.png', 46)
                         if val == '2':
-                            sprite = Tree(tile_size, x, y, 'graphics/willow/3.png', 46)
+                            sprite = Tree(tile_size, x, y, 'graphics/willow/1.png', 46)
 
                     # if type == 'stone':
                     #     if val == '0':
@@ -257,6 +260,13 @@ class Level:
 
                     if type == 'chest':
                         sprite = Chest(tile_size, x, y, 'graphics/chest', tile_size)
+
+                    if type == 'box':
+                        image_index_list = list(range(1, 7))
+                        for index in image_index_list:
+                            if val == str(index - 1):
+                                full_path = 'graphics/box/' + str(index) + '.png'
+                                sprite = Ridge(tile_size, x, y, full_path, tile_size)
 
                     sprite_group.add(sprite)
 
@@ -419,7 +429,6 @@ class Level:
             if chest.rect.colliderect(self.player.sprite.rect):
                 self.win = True
 
-
     def show_win_screen(self):
        if self.win:
             self.display_surface.fill('black')
@@ -449,11 +458,6 @@ class Level:
                 if candle_top < player_bottom and self.player.sprite.direction.y > 0:
                     self.player.sprite.get_damage()
 
-    def stone_blow(self):
-        player = self.player.sprite
-        for stone in self.stone_sprites.sprites():
-                if stone.rect.top == player.rect.midbottom:
-                    stone.kill()
     def eat_banana(self):
         player = self.player.sprite
         for banana in self.banana_sprites.sprites():
@@ -509,6 +513,9 @@ class Level:
         self.chest_sprites.draw(self.display_surface)
         self.chest_sprites.update(self.world_shift)
 
+        self.box_sprites.draw(self.display_surface)
+        self.box_sprites.update(self.world_shift)
+
         # player
         self.player.update()
         self.scroll_x()
@@ -540,6 +547,7 @@ class Level:
         #boundarie
         self.bound_sprites.update(self.world_shift)
         self.collision()
+
 
         #TRAPS
         self.fire_sprites.draw(self.display_surface)

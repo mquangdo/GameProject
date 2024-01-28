@@ -19,7 +19,8 @@ level_0 = {'terrain':'0/level_0_terrain.csv',
            'flag': '0/level_0_flag.csv',
            'spike': '0/level_0_spike.csv',
            'ridge':'0/level_0_ridge.csv',
-           'chest': '0/level_0_chest.csv'
+           'chest': '0/level_0_chest.csv',
+           'box':'0/level_0_box.csv'
            }
 
 level_1 = {'terrain':'1/level_1_terrain.csv',
@@ -42,7 +43,8 @@ level_1 = {'terrain':'1/level_1_terrain.csv',
            'flag': '1/level_1_flag.csv',
            'spike':'1/level_1_spike.csv',
            'ridge':'1/level_1_ridge.csv',
-           'chest':'1/level_1_chest.csv'}
+           'chest':'1/level_1_chest.csv',
+           'box':'1/level_1_box.csv'}
 
 level_2 = {'terrain':'2/level_2_terrain.csv',
            'tree': '2/level_2_tree.csv',
@@ -64,5 +66,6 @@ level_2 = {'terrain':'2/level_2_terrain.csv',
            'flag': '2/level_2_flag.csv',
            'spike': '2/level_2_spike.csv',
             'ridge':'2/level_2_ridge.csv',
-           'chest': '2/level_2_chest.csv'
+           'chest': '2/level_2_chest.csv',
+           'box': '2/level_2_box.csv'
            }

@@ -1,7 +1,7 @@
 import pygame
 from supports import import_folder, import_cut_graphics
 import random
-import numpy as np
+
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, size: int, x, y):
@@ -65,6 +65,13 @@ class Ridge(StaticTile):
         super().__init__(size, x, y, pygame.image.load(path))
         new_y = y + shift_y
         self.rect = self.image.get_rect(bottomleft=(x, new_y))
+
+
+class Box(StaticTile):
+    def __init__(self, size, x, y, path: str, shift_y):
+        super().__init__(size, x, y, pygame.image.load(path))
+        new_y = y + shift_y
+        self.rect = self.image.get_rect(midbottom = (x, new_y))
 
 
 class Ladder(StaticTile):
