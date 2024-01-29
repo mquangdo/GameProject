@@ -2,7 +2,7 @@ import math
 import pygame
 from supports import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_width, screen_height
-from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Rocket, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag, Spike, Ridge, Chest, Box
+from tiles import StaticTile, Tree, Stone, Bush, Ladder, FlyEye, Slime, AnimatedTile, Enemy, Effect, Crab, Fire, Portal, Saw, MoveSaw, Banana, Elevator, Flag, Spike, Ridge, Chest, Box, Pointer
 from player import Player
 from ui import UI
 
@@ -12,7 +12,12 @@ class Level:
     def __init__(self, level_data: dict, surface) -> None:
         self.display_surface = surface
         self.world_shift = 0
-        self.world_shift_1 = 0
+
+
+        #audio
+        self.stomp_sound = pygame.mixer.Sound('audio/effects/stomp.wav')
+
+
 
         #UI setup
         self.ui = UI(self.display_surface)
@@ -61,6 +66,9 @@ class Level:
         #chest
         chest_layout: list = import_csv_layout(level_data['chest'])
         self.chest_sprites = self.create_tile_group(chest_layout, 'chest')
+
+        pointer_layout: list = import_csv_layout(level_data['pointer'])
+        self.pointer_sprites = self.create_tile_group(pointer_layout, 'pointer')
 
         # player
         player_layout = import_csv_layout(level_data['player'])
@@ -266,7 +274,11 @@ class Level:
                         for index in image_index_list:
                             if val == str(index - 1):
                                 full_path = 'graphics/box/' + str(index) + '.png'
-                                sprite = Ridge(tile_size, x, y, full_path, tile_size)
+                                sprite = Box(tile_size, x, y, full_path, tile_size)
+
+                    if type == 'pointer':
+                        sprite = Pointer(tile_size, x, y, 'graphics/pointer/1.png', tile_size)
+
 
                     sprite_group.add(sprite)
 
@@ -394,6 +406,7 @@ class Level:
             self.world_shift = 0
             player.speed = 8
 
+
     def check_enemy_collisions(self):
 
 
@@ -412,12 +425,16 @@ class Level:
                 enemy_top = enemy.rect.top
                 player_bottom = self.player.sprite.rect.bottom
                 if (enemy_top < player_bottom < enemy_center and self.player.sprite.direction.y >= 0):
+                    self.stomp_sound.play()
                     self.player.sprite.direction.y = - 8
                     explosion_sprite = Effect(tile_size ,enemy.rect.centerx, enemy.rect.centery)
                     self.explosion_sprite.add(explosion_sprite)
                     enemy.kill()
+                    self.stomp_sound.play()
                 else:
                     self.player.sprite.get_damage()
+
+
 
 
     def check_death(self):
@@ -432,6 +449,7 @@ class Level:
     def show_win_screen(self):
        if self.win:
             self.display_surface.fill('black')
+
 
     def show_death_screen(self):
         player_surf = pygame.image.load('pink_man/idle/idle_01.png')
@@ -479,7 +497,6 @@ class Level:
             if spike.rect.colliderect(self.player.sprite.rect):
                 self.player.sprite.get_damage()
 
-
     def run(self):
         #terrain
         self.terrain_sprites.draw(self.display_surface)
@@ -515,6 +532,9 @@ class Level:
 
         self.box_sprites.draw(self.display_surface)
         self.box_sprites.update(self.world_shift)
+
+        self.pointer_sprites.draw(self.display_surface)
+        self.pointer_sprites.update(self.world_shift)
 
         # player
         self.player.update()
@@ -588,8 +608,6 @@ class Level:
         self.explosion_sprite.draw(self.display_surface)
         self.explosion_sprite.update(self.world_shift)
         # self.player.sprite.invincible_timer() dòng này thay cho dòng ở update ở player.py vẫn ok
-
-
 
 
         #rocket

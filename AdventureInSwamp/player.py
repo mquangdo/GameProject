@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.import_character_assets()
         self.frame_index = 0
-        self.animation_speed = 0.4 #how fast are animations updated
+        self.animation_speed = 0.4
         # self.image = pygame.Surface((32, 64))#tao ra 1 surface 32*64, hiển nhiên tile_size của ta đang là 64 nên ta mới để là 32*64
         self.image = self.animations['idle'][self.frame_index]#value của key 'idle' là 1 list các frame idle
         # self.image.fill('red')#fill bằng màu đỏ
@@ -48,6 +48,10 @@ class Player(pygame.sprite.Sprite):
         #ui setup
         self.max_health = 100
         self.current_health = 100
+
+        #audio
+        self.jump_sound = pygame.mixer.Sound('audio/effects/jump.wav')
+        self.hurt_sound = pygame.mixer.Sound('audio/effects/hurt.mp3')
 
     def import_character_assets(self) -> None:
         character_path = 'pink_man/'
@@ -107,6 +111,7 @@ class Player(pygame.sprite.Sprite):
 
     def get_damage(self):
         if not self.invincible:
+            self.hurt_sound.play()
             self.current_health = self.current_health - self.max_health / 10
             self.invincible = True
             self.hurt_time = pygame.time.get_ticks()
@@ -159,6 +164,8 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
         if keys[pygame.K_w] and self.on_ground:
             self.jump()
+            self.jump_sound.play()
+
 
         # if keys[pygame.K_w] and self.double_jump and self.on_air:
         #     self.jump()
