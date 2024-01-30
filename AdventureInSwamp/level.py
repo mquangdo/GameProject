@@ -15,8 +15,12 @@ class Level:
 
 
         #audio
-        self.stomp_sound = pygame.mixer.Sound('audio/effects/stomp.wav')
 
+        self.stomp_sound = pygame.mixer.Sound('audio/effects/stomp.wav')
+        self.stomp_sound.set_volume(0.5)
+        self.game_sound = pygame.mixer.Sound('audio/y2mate.com - 2d game OST  Background Music.mp3')
+        self.game_sound.set_volume(0.05)
+        self.eat_sound = pygame.mixer.Sound('audio/y2mate (mp3cut.net).mp3')
 
 
         #UI setup
@@ -430,7 +434,7 @@ class Level:
                     explosion_sprite = Effect(tile_size ,enemy.rect.centerx, enemy.rect.centery)
                     self.explosion_sprite.add(explosion_sprite)
                     enemy.kill()
-                    self.stomp_sound.play()
+                    pygame.mixer.Channel(0).play(self.stomp_sound)
                 else:
                     self.player.sprite.get_damage()
 
@@ -439,6 +443,8 @@ class Level:
 
     def check_death(self):
         if self.player.sprite.current_health <= 0:
+            self.show_death_screen()
+        if self.player.sprite.rect.y >= screen_height:
             self.show_death_screen()
 
     def check_win(self):
@@ -449,7 +455,13 @@ class Level:
     def show_win_screen(self):
        if self.win:
             self.display_surface.fill('black')
-
+            win_screen = pygame.image.load('graphics/360_F_314566645_UNHlYyGK2EVdGQ8MoNw95vvH44yknrc7.jpg').convert_alpha()
+            win_rect = win_screen.get_rect(center = (screen_width/2, screen_height/2))
+            self.display_surface.blit(win_screen, win_rect)
+            text_font = pygame.font.Font('graphics/font/Pixeltype.ttf', 50)
+            text_surface = text_font.render('Thank you for playing!  Rerun the program if you want to replay :(', True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 1.5))
+            self.display_surface.blit(text_surface, text_rect)
 
     def show_death_screen(self):
         player_surf = pygame.image.load('pink_man/idle/idle_01.png')
@@ -482,6 +494,7 @@ class Level:
             if banana.rect.colliderect(self.player.sprite.rect):
                 banana.kill()
                 player.current_health += 10
+                pygame.mixer.Channel(0).play(self.eat_sound)
                 if player.current_health >= 100:
                     player.current_health = 100
 
@@ -538,7 +551,6 @@ class Level:
 
         # player
         self.player.update()
-        self.scroll_x()
 
         # self.scroll_y()
         self.horizontal_movement_collision()
@@ -620,4 +632,13 @@ class Level:
         self.check_death()
         self.check_win()
         self.show_win_screen()
+
+        self.scroll_x()
+    
+
+
+
+
+
+
 

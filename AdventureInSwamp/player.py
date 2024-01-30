@@ -51,7 +51,11 @@ class Player(pygame.sprite.Sprite):
 
         #audio
         self.jump_sound = pygame.mixer.Sound('audio/effects/jump.wav')
+        self.jump_sound.set_volume(0.1)
         self.hurt_sound = pygame.mixer.Sound('audio/effects/hurt.mp3')
+        # self.game_sound = pygame.mixer.Sound('audio/y2mate.com - 2d game OST  Background Music.mp3')
+        # self.game_sound.set_volume(0.07)
+        self.running_sound = pygame.mixer.Sound('audio/y2mate.com - Running Sound Effect.mp3')
 
     def import_character_assets(self) -> None:
         character_path = 'pink_man/'
@@ -111,7 +115,7 @@ class Player(pygame.sprite.Sprite):
 
     def get_damage(self):
         if not self.invincible:
-            self.hurt_sound.play()
+            pygame.mixer.Channel(1).play(self.hurt_sound)
             self.current_health = self.current_health - self.max_health / 10
             self.invincible = True
             self.hurt_time = pygame.time.get_ticks()
@@ -128,8 +132,6 @@ class Player(pygame.sprite.Sprite):
             return 255
         else:
             return 0
-
-
     def get_status(self) -> None:#hàm để lấy trạng thái của player dựa vaào direction
         if self.direction.y < 0:
             self.status = 'double_jump'
@@ -160,33 +162,12 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_a]:
             self.direction.x = -1
             self.facing_right = False
+
         else:
             self.direction.x = 0
         if keys[pygame.K_w] and self.on_ground:
             self.jump()
-            self.jump_sound.play()
-
-
-        # if keys[pygame.K_w] and self.double_jump and self.on_air:
-        #     self.jump()
-        #     self.double_jump = False
-
-    def reset_jump_count(self):
-        if self.on_ground:
-            self.jump_count = 300
-
-
-
-    # def double(self):
-    #     keys = pygame.key.get_pressed()
-    #     if keys[pygame.K_w] and self.on_air and self.double_jump:
-    #         self.jump()
-    #         self.double_jump = False
-    #
-    # def double_jump_timer(self):
-    #     if self.on_air and self.on_ground:
-    #         self.on_air = False
-
+            pygame.mixer.Channel(2).play(self.jump_sound)
 
 
 
@@ -198,6 +179,8 @@ class Player(pygame.sprite.Sprite):
         self.get_status()
         self.animate()
         self.invincible_timer()
-        self.reset_jump_count()
+
+        # self.game_sound.play()
+
         # self.double()
         # self.double_jump_timer()

@@ -39,8 +39,7 @@ while True:
         if map1.switch_level():
             map1.run()
         else:
-            if map2.switch_level():
-                map2.run()
+            map2.run()
 
     pygame.display.update()
     clock.tick(60)

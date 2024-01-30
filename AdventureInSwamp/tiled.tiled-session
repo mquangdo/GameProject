@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tile_set/pointer.tsx",
+    "activeFile": "level_data/untitled.tmx",
     "expandedProjectPaths": [
-        "level_data",
         ".",
+        "level_data",
         "tile_set"
     ],
     "fileStates": {
@@ -35,16 +35,16 @@
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 2866,
-                "y": 499
+                "x": 4116,
+                "y": 321
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_2.tmx": {
             "scale": 0.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 2254,
-                "y": 247
+                "x": 4018,
+                "y": 243
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/bound.tsx": {
@@ -76,15 +76,15 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 1118.1818181818182,
-                "y": 416.6666666666665
+                "y": 410.6060606060605
             }
         },
         "level_data/untitled.tmx": {
             "scale": 0.5,
-            "selectedLayer": 8,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 914,
-                "y": 565
+                "x": 5020,
+                "y": 561
             }
         },
         "tile_set/banana.tsx": {
@@ -205,7 +205,7 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/2",
+    "last.exportedFilePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/1",
     "last.imagePath": "D:/Users/Asus/PycharmProjects/pythonProject/AdventureInSwamp/graphics/pointer",
     "map.height": 14,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
@@ -250,8 +250,8 @@
         "level_data/level_1.tmx",
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/chest.tsx",
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_0.tmx",
-        "level_data/untitled.tmx",
-        "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_1.tmx"
+        "tile_set/pointer.tsx",
+        "tile_set/chest.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
