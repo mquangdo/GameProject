@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_data/untitled.tmx",
+    "activeFile": "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_1.tmx",
     "expandedProjectPaths": [
         ".",
         "level_data",
@@ -27,24 +27,24 @@
             "scale": 0.5,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 2300,
-                "y": 299
+                "x": 2298,
+                "y": 297
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_1.tmx": {
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 4116,
-                "y": 321
+                "x": 1854,
+                "y": 319
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_2.tmx": {
             "scale": 0.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 4018,
-                "y": 243
+                "x": 970,
+                "y": 241
             }
         },
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/bound.tsx": {
@@ -76,15 +76,15 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 1118.1818181818182,
-                "y": 410.6060606060605
+                "y": 407.5757575757575
             }
         },
         "level_data/untitled.tmx": {
             "scale": 0.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 5020,
-                "y": 561
+                "x": 2786,
+                "y": 313
             }
         },
         "tile_set/banana.tsx": {
@@ -250,8 +250,8 @@
         "level_data/level_1.tmx",
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/tile_set/chest.tsx",
         "D:/Users/Asus/PycharmProjects/pythonProject/BigTestPinkMan/level_data/level_0.tmx",
-        "tile_set/pointer.tsx",
-        "tile_set/chest.tsx"
+        "level_data/untitled.tmx",
+        "tile_set/pointer.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
